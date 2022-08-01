@@ -39,10 +39,12 @@ def run(playwright: Playwright) -> None:
     page.locator("text=Test Cases").click()
     page.wait_for_url("http://127.0.0.1:8000/tests/")
 
-    assert page.query_selector_all('body > main > div > div > div > div.testTableBox > table > tbody > tr.testRow_42 > td:nth-child(2)') is not None
+    assert page.query_selector_all('text=hello') is not None # can use or test, or selctor
+
+    page.goto("http://127.0.0.1:8000/tests/")
 
     # Click text=3 hello world alice Norun None PASS FAIL Details Delete >> button >> nth=3
-    page.locator("text=42 hello world alice Norun None PASS FAIL Details Delete >> button").nth(3).click()
+    page.locator("text=hello world alice Norun None PASS FAIL Details Delete >> button").nth(3).click()
 
     # Close page
     page.close()
