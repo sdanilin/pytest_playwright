@@ -1,0 +1,2 @@
+'''Setting global fixture'''
+
