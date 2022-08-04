@@ -1,32 +1,45 @@
 from playwright.sync_api import Playwright
 
 class App:
-    def __init__(self, playwright: Playwright):
-        self.browser = playwright.chromium.launch(headless=False, devtools=True, slow_mo=500)
+    def __init__(self, playwright: Playwright, base_url: str, headless=False):
+        self.browser = playwright.chromium.launch(headless=headless, slow_mo=500)
         self.context = self.browser.new_context(viewport={"width": 1920, "height": 1080})
         self.page = self.context.new_page()
-        self.page.goto("http://127.0.0.1:8000/login/?next=/")
+        self.base_url = base_url
 
-    def login(self):
-        self.page.locator("input[name=\"username\"]").fill("alice")
-        self.page.locator("input[name=\"password\"]").fill("Qamania123")
+    def goto(self, endpoint: str, use_base_url=True):
+        if use_base_url:
+            self.page.goto(self.base_url + endpoint)
+        else:
+            self.page.goto(endpoint)
+
+    def navegate_to(self, menu: str):
+        self.page.locator(f"css=header >> text=\"{menu}\"").click()
+
+    def login(self, login: str, password: str):
+        self.page.locator("input[name=\"username\"]").fill(login)
+        self.page.locator("input[name=\"password\"]").fill(password)
         self.page.locator("text=Login").click()
 
-    def create_test(self):
+    def create_test(self, test_name: str, test_desription: str):
         self.page.locator("text=Create new test").click()
-        self.page.locator("input[name=\"name\"]").fill("hello")
-        self.page.locator("textarea[name=\"description\"]").fill("world")
+        self.page.locator("input[name=\"name\"]").fill(test_name)
+        self.page.locator("textarea[name=\"description\"]").fill(test_desription)
         self.page.locator("input:has-text(\"Create\")").click()
 
-    def open_tests(self):
-        self.page.locator("text=Test Cases").click()
+    # def create_test(self):
+    #     self.page.locator("text=Create new test").click()
+    #     self.page.locator("input[name=\"name\"]").fill('hello')
+    #     self.page.locator("textarea[name=\"description\"]").fill('world')
+    #     self.page.locator("input:has-text(\"Create\")").click()
 
-    def check_test_created(self):
-        return self.page.query_selector_all('text=hello') is not None
+    def check_test_exists(self, test_name: str):
+        return self.page.query_selector_all(f'css=tr >> text=\"\"{test_name}') is not None
 
 
-    def delete_test(self):
-        self.page.locator("text=hello world alice Norun None PASS FAIL Details Delete >> button").nth(3).click()
+    def delete_test_by_name(self, test_name: str):
+        row = self.page.query_selector_all(f'*css=tr >> text=\"\"{test_name}')
+        row.query_selector   ('.deleteBtn').click()
 
     def close(self):
         self.page.close()
