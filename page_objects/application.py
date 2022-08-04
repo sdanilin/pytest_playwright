@@ -1,4 +1,5 @@
 from playwright.sync_api import Playwright
+from .test_cases import TestCases
 
 class App:
     def __init__(self, playwright: Playwright, base_url: str, headless=False):
@@ -6,6 +7,7 @@ class App:
         self.context = self.browser.new_context(viewport={"width": 1920, "height": 1080})
         self.page = self.context.new_page()
         self.base_url = base_url
+        self.test_case = TestCases(self.page)
 
     def goto(self, endpoint: str, use_base_url=True):
         if use_base_url:
