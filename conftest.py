@@ -4,13 +4,13 @@ from pytest import fixture
 from playwright.sync_api import Playwright, sync_playwright, expect
 from page_objects.application import App
 
-@fixture
+@fixture(scope='session')
 def get_playwright():
     with sync_playwright() as playwright:
         yield playwright
 
 
-@fixture
+@fixture(scope='session')
 def desktop_app(get_playwright):
     app = App(get_playwright, base_url='http://127.0.0.1:8000')
     app.goto('/')
