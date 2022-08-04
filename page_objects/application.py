@@ -2,7 +2,7 @@ from playwright.sync_api import Playwright
 
 class App:
     def __init__(self, playwright: Playwright, base_url: str, headless=False):
-        self.browser = playwright.chromium.launch(headless=headless, slow_mo=500)
+        self.browser = playwright.chromium.launch(headless=headless, slow_mo=50)
         self.context = self.browser.new_context(viewport={"width": 1920, "height": 1080})
         self.page = self.context.new_page()
         self.base_url = base_url
@@ -27,19 +27,12 @@ class App:
         self.page.locator("textarea[name=\"description\"]").fill(test_desription)
         self.page.locator("input:has-text(\"Create\")").click()
 
-    # def create_test(self):
-    #     self.page.locator("text=Create new test").click()
-    #     self.page.locator("input[name=\"name\"]").fill('hello')
-    #     self.page.locator("textarea[name=\"description\"]").fill('world')
-    #     self.page.locator("input:has-text(\"Create\")").click()
-
     def check_test_exists(self, test_name: str):
-        return self.page.query_selector_all(f'css=tr >> text=\"\"{test_name}') is not None
-
+        return self.page.query_selector(f'css=tr >> text=\"\"{test_name}') is not None
 
     def delete_test_by_name(self, test_name: str):
-        row = self.page.query_selector_all(f'*css=tr >> text=\"\"{test_name}')
-        row.query_selector   ('.deleteBtn').click()
+        row = self.page.query_selector(f'*css=tr >> text=\"\"{test_name}')
+        row.query_selector('.deleteBtn').click()
 
     def close(self):
         self.page.close()
