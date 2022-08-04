@@ -17,7 +17,7 @@ def desktop_app(get_playwright):
     yield app
     app.close()
 
-@fixture
+@fixture(scope='session')
 def desktop_app_auth(desktop_app):
     app = desktop_app
     app.goto('/login')
