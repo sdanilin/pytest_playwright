@@ -1,6 +1,7 @@
 from playwright.sync_api import Playwright
 from .test_cases import TestCases
 
+
 class App:
     def __init__(self, playwright: Playwright, base_url: str, headless=False):
         self.browser = playwright.chromium.launch(headless=headless, slow_mo=50)

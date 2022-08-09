@@ -19,8 +19,9 @@ def get_playwright():
 
 
 @fixture(scope='session')
-def desktop_app(get_playwright):
-    app = App(get_playwright, base_url=settings.BASE_URL)
+def desktop_app(get_playwright, request):
+    base_url = request.config.getopltion('--base_url')
+    app = App(get_playwright, base_url=base_url)
     app.goto('/')
     yield app
     app.close()
@@ -30,3 +31,6 @@ def desktop_app_auth(desktop_app):
     desktop_app.app.goto('/login')
     desktop_app.app.login(**settings.USER)
     yield app
+
+def pytest_addoption(parser):
+    parser.addoption('--base_url', action='store', default='http://127.0.0.1:8000')
