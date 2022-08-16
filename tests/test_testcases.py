@@ -5,7 +5,7 @@ data = [('hello', 'world'),
         ('123', 'world'),]
 
 
-@mark.parametrize('name,description', data)
+@mark.parametrize('name,description', data, ids=['general test', 'test with no description', 'test with digits in name'])
 def test_new_testcase(desktop_app_auth, name, description):
         desktop_app_auth.navegate_to('Create new test')
         desktop_app_auth.create_test(name, description)
