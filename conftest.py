@@ -1,11 +1,11 @@
 '''Setting global fixture'''
 import json
 import os
-
+import settings
 from pytest import fixture
 from playwright.sync_api import sync_playwright
 from page_objects.App import App
-import settings
+
 
 
 fixture(autouse=True, scope='session')
