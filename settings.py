@@ -1,3 +1,4 @@
-BASE_URL = 'http://127.0.0.1:8000'
-USER = {'login': 'alice',
-        'password': 'Qamania123'}
+BROWSER_OPTIONS = {
+        "getlocation": {"latitude": 48.8, "logitude": 2.3}
+        "premission": ['geolocation']
+}

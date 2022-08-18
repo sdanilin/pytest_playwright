@@ -3,9 +3,14 @@ from .test_cases import TestCases
 
 
 class App:
-    def __init__(self, playwright: Playwright, base_url: str, headless=False):
+    def __init__(self, playwright: Playwright, base_url: str, headless=False, device=None, **kwargs):
+        device_config = playwright.devices.get(device)
+        if device_config is not None:
+            device_config.update(kwargs)
+        else:
+            device_config = kwargs
         self.browser = playwright.chromium.launch(headless=headless, slow_mo=50)
-        self.context = self.browser.new_context(viewport={"width": 1920, "height": 1080})
+        self.context = self.browser.new_context(**device_config, viewport={"width": 1920, "height": 1080})
         self.page = self.context.new_page()
         self.base_url = base_url
         self.test_case = TestCases(self.page)
