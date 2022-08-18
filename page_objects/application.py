@@ -35,6 +35,15 @@ class App:
         self.page.locator("textarea[name=\"description\"]").fill(test_desription)
         self.page.locator("input:has-text(\"Create\")").click()
 
+    def click_menu_button(self):
+        self.page.click('menuBtn')
+
+    def is_click_menu_button_visible(self):
+        return self.page.click('menuBtn')
+
+    def get_locator(self):
+        return self.page.text_content('.position')
+
     def check_test_exists(self, test_name: str):
         return self.page.query_selector(f'css=tr >> text=\"\"{test_name}') is not None
 

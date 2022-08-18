@@ -1,7 +1,7 @@
 '''Setting global fixture'''
 import json
 import os
-import settings
+from settings import *
 from pytest import fixture
 from playwright.sync_api import sync_playwright
 from page_objects.App import App
@@ -23,7 +23,7 @@ def get_playwright():
 @fixture(scope='session')
 def desktop_app(get_playwright, request):
     base_url = request.config.getoption('--base_url')
-    app = App(get_playwright, base_url=base_url)
+    app = App(get_playwright, base_url=base_url, **BROWSER_OPTIONS)
     app.goto('/')
     yield app
     app.close()
@@ -41,7 +41,7 @@ def desktop_app_auth(desktop_app, request):
 def mobile_app(get_playwright, request):
     base_url = request.config.getoption('--base_url')
     device = request.config.getoption('--device')
-    app = App(get_playwright, base_url=base_url, device=device)
+    app = App(get_playwright, base_url=base_url, device=device, **BROWSER_OPTIONS)
     app.goto('/')
     yield app
     app.close()
